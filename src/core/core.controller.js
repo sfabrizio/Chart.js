@@ -661,7 +661,7 @@ helpers.extend(Chart.prototype, /** @lends Chart */ {
 		var me = this;
 
 		for (var i = 0, ilen = (me.data.datasets || []).length; i < ilen; ++i) {
-			if (me.isDatasetVisible(i)) {
+			if (me.isDatasetVisible(i) && me.getDatasetMeta(i).controller) {
 				me.getDatasetMeta(i).controller.transition(easingValue);
 			}
 		}
@@ -708,8 +708,9 @@ helpers.extend(Chart.prototype, /** @lends Chart */ {
 		if (plugins.notify(me, 'beforeDatasetDraw', [args]) === false) {
 			return;
 		}
-
-		meta.controller.draw(easingValue);
+		if (meta.controller) {
+			meta.controller.draw(easingValue);
+		}
 
 		plugins.notify(me, 'afterDatasetDraw', [args]);
 	},
